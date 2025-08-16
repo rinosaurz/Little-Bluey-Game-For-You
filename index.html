@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bluey Dance & Snack Party!</title>
+    <link rel="icon" type="image/x-icon" href="img/bicon.jpg">
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #f0f9ff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: #2b4570;
+            background-image: url('img/bgimg.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            background-repeat: no-repeat; 
+            background-attachment: fixed; 
+        }
+        
+        header {
+            background-color: #898AC4;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: white;
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .game-container {
+            max-width: 800px;
+            margin: 20px auto;
+            position: relative;
+            height: 500px;
+            border: 8px solid #ffc857;
+            border-radius: 15px;
+            background-color: rgba(168, 213, 226, 0.8); 
+            overflow: hidden;
+        }
+        
+        .character {
+            position: absolute;
+            bottom: 0px; /* Characters are now at the very bottom to catch items */
+            width: 100px;
+            height: 150px;
+            transition: left 0.1s ease-out; /* Smooth horizontal movement */
+            z-index: 10;
+        }
+        
+        #bluey {
+            left: 150px; /* Initial position */
+        }
+        
+        #bingo {
+            left: 550px; /* Initial position */
+        }
+        
+        .falling-item {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 5;
+            font-size: 32px;
+            text-align: center;
+            line-height: 50px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        .controls {
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #ffc857;
+            border-radius: 10px;
+            max-width: 500px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background-color: #4cb944;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            margin: 5px;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .control-btn:hover {
+            background-color: #3d9a36;
+            transform: scale(1.05);
+        }
+        
+        .score-display {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        
+        .streak-display {
+            font-size: 20px;
+            color: #e63946;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .music-btn {
+            background-color: #e63946;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            margin-top: 20px;
+            border-radius: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .music-btn:hover {
+            background-color: #c1121f;
+            transform: scale(1.05);
+        }
+
+        /* Play Again Button Style */
+        #play-again-btn {
+            background-color: #3a86ff; /* A nice blue color */
+            display: none; /* Hidden by default */
+        }
+
+        #play-again-btn:hover {
+            background-color: #2a6bff;
+        }
+
+        /* Stop Playing Button Style */
+        #stop-btn {
+            background-color: #f44336; /* Red color for stop */
+            display: none; /* Hidden by default */
+        }
+
+        #stop-btn:hover {
+            background-color: #d32f2f;
+        }
+        
+        .dance-animation {
+            animation: dance 0.5s infinite alternate;
+        }
+        
+        @keyframes dance {
+            0% { transform: rotate(0deg); }
+            20% { transform: rotate(-10deg); }
+            40% { transform: rotate(10deg); }
+            60% { transform: rotate(-20deg); }
+            80% { transform: rotate(20deg); }
+            100% { transform: rotate(0deg); }
+        }
+        
+        .wiggle-animation {
+            animation: wiggle 0.5s infinite;
+        }
+        
+        @keyframes wiggle {
+            0% { transform: rotate(0deg) scaleY(1); }
+            25% { transform: rotate(5deg) scaleY(1.1); }
+            50% { transform: rotate(0deg) scaleY(1); }
+            75% { transform: rotate(-5deg) scaleY(1.1); }
+            100% { transform: rotate(0deg) scaleY(1); }
+        }
+        
+        .cartwheel-animation {
+            animation: cartwheel 2s infinite;
+        }
+        
+        @keyframes cartwheel {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(90deg); }
+            50% { transform: rotate(180deg); }
+            75% { transform: rotate(270deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .celebrate-animation {
+            animation: celebrate 1s ease-out;
+        }
+        
+        @keyframes celebrate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2) translateY(-20px); }
+            100% { transform: scale(1); }
+        }
+        
+        #playlist-container {
+            margin: 30px auto;
+            max-width: 600px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .instructions {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: rgba(76, 185, 68, 0.2);
+            border-radius: 10px;
+        }
+
+        /* --- NEW DESIGN ELEMENT: Party Banner --- */
+        .party-banner {
+            background-color: #ff6f61; /* Bright, fun color */
+            color: white;
+            padding: 10px 0;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            border-bottom: 5px solid #e63946;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            animation: pulse 2s infinite alternate; /* Simple animation */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); }
+        }
+        /* -- END NEW DESIGN ELEMENT --- */
+
+        /* --- NEW: Score Celebration Message --- */
+        #score-celebration-message {
+            font-size: 28px;
+            color: #38b000; /* Matcha green */
+            font-weight: bold;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: none; /* Hidden by default */
+            animation: fadeInOut 5s forwards; /* Animation for message */
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            10% { opacity: 1; transform: translateY(0); }
+            90% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-20px); }
+        }
+        /* --- END NEW: Score Celebration Message --- */
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Bluey's Dance & Snack Party!</h1>
+    </header>
+    
+ 
+    <div class="party-banner">Let's Get This Party Started!</div>
+
+
+    <div class="instructions">
+        <p>Hii tetehh Zaroo! Since I'm (uhm very employed *coughs*), I decide to make a mini game of Bluey in my free time. And since you've always help me and teach me Deutsch, 
+            so I thought I'll dedicate this for youu so that Bluey and Bingo can dance to our playlist💃. </p>
+        <p> Basically this is a really simple game, you can move Bluey (Left/Right arrows) 
+            and Bingo (Up/Down arrows) or use the buttons below to catch the falling music notes, snacks, and matcha drinks! Seee if you can hit 5000, okay anyway enough yapping.
+            <br>Viel Spaß beim Spielen! </p>
+    </div>
+    
+    <div class="score-display">Score: <span id="score">0</span></div>
+    <div class="streak-display">Streak: <span id="streak">0</span> (5+ for dance, 7+ for wiggles, 10+ for cartwheels!)</div>
+    
+    <div class="game-container">
+        <!-- ✂️--- CHARACTER IMAGE PLACEHOLDERS ---✂️ -->
+        <img id="bluey" class="character" src="img/bluey.png" alt="Bluey character excited to dance and catch snacks">
+        <img id="bingo" class="character" src="img/bingo.jpg" alt="Bingo character excited to dance and catch snacks">
+        <!-- ✂️--- END CHARACTER IMAGE PLACEHOLDERS ---✂️ -->
+    </div>
+    
+    <div class="controls">
+        <!-- Buttons for Bluey -->
+        <button class="control-btn" id="bluey-left-btn">Bluey ←</button>
+        <button class="control-btn" id="bluey-right-btn">Bluey →</button>
+        <!-- Buttons for Bingo -->
+        <button class="control-btn" id="bingo-left-btn">Bingo ←</button>
+        <button class="control-btn" id="bingo-right-btn">Bingo →</button>
+    </div>
+    
+    <div>
+        <button class="music-btn" id="start-btn">Start the Party!</button>
+        <button class="music-btn" id="play-again-btn">Play Again!</button>
+        <button class="music-btn" id="stop-btn">Stop Playing</button>
+    </div>
+
+    <!-- --- NEW: Score Celebration Message Display ----->
+    <div id="score-celebration-message"></div>
+    <!-- --- END NEW: Score Celebration Message Display --- -->
+    
+    <div id="playlist-container">
+        <h3>Our Playlists</h3>
+        <p><a href="https://open.spotify.com/playlist/7EcWGqRBtbQBwbhwToaBu5?si=kwKENibETtuguYLQkN8qoA">Teacher's Mode: </p>
+        <p><a href="https://open.spotify.com/playlist/6HutUKRMoTd63YoWaTlwXm?si=3zRTfV7FQEaxoP0cGDYAKw">Hiii Zaroo </p>
+    </div>
+    
+    <script>
+        // Game variables
+        let score = 0;
+        let streak = 0;
+        let gameActive = false;
+        let gameInterval; // To store the interval for item generation
+        let fallingItemIntervals = []; // To store intervals for individual falling items
+        let scoreMilestones = [5000, 10000, 15000, 20000]; // Define score milestones
+        let achievedMilestones = new Set(); // To track achieved milestones
+
+        // Character elements
+        const bluey = document.getElementById('bluey');
+        const bingo = document.getElementById('bingo');
+        const gameContainer = document.querySelector('.game-container');
+        const gameContainerWidth = gameContainer.offsetWidth; // Get width of game area
+
+        // Character movement speed
+        const characterSpeed = 50; // Pixels to move per key press/button click
+
+        // Falling items configuration
+        const fallingItems = [
+            { emoji: '♪', type: 'music', points: 10 },
+            { emoji: '♫', type: 'music', points: 15 },
+            { emoji: '🎵', type: 'music', points: 20 },
+            { emoji: '🍓', type: 'food', points: 10 },
+            { emoji: '🍪', type: 'food', points: 10 },
+            { emoji: '🍕', type: 'food', points: 15 },
+            { emoji: '🍰', type: 'food', points: 20 },
+            { emoji: '☕️', type: 'matcha', points: 15 },
+            { emoji: '🍵', type: 'matcha', points: 20 }
+        ];
+        
+        // Initialize the game
+        function initGame() {
+            score = 0;
+            streak = 0;
+            gameActive = true;
+            achievedMilestones.clear(); // Reset milestones for new game
+            document.getElementById('score').textContent = score;
+            document.getElementById('streak').textContent = streak;
+            document.getElementById('start-btn').style.display = 'none'; // Hide start button
+            document.getElementById('play-again-btn').style.display = 'none'; // Hide play again button
+            document.getElementById('stop-btn').style.display = 'inline-block'; // Show stop button
+            document.getElementById('score-celebration-message').style.display = 'none'; // Hide message
+
+            // Clear any existing falling items from previous games
+            document.querySelectorAll('.falling-item').forEach(item => item.remove());
+
+            // Reset character positions
+            bluey.style.left = '150px';
+            bingo.style.left = '550px';
+
+            // Add keyboard event listeners (ensure they are only added once)
+            document.removeEventListener('keydown', handleKeyPress); // Remove previous to prevent duplicates
+            document.addEventListener('keydown', handleKeyPress);
+            
+            // Add button click listeners for character movement (ensure they are only added once)
+            document.getElementById('bluey-left-btn').onclick = () => moveCharacter('bluey', -characterSpeed);
+            document.getElementById('bluey-right-btn').onclick = () => moveCharacter('bluey', characterSpeed);
+            document.getElementById('bingo-left-btn').onclick = () => moveCharacter('bingo', -characterSpeed);
+            document.getElementById('bingo-right-btn').onclick = () => moveCharacter('bingo', characterSpeed);
+            
+            // Start generating falling items
+            gameInterval = setInterval(generateFallingItem, 800 + Math.random() * 1200); // Generate items more frequently
+        }
+
+        // Stop the game
+        function stopGame() {
+            // Stop all intervals
+            clearInterval(gameInterval);
+            fallingItemIntervals.forEach(interval => clearInterval(interval));
+            fallingItemIntervals = []; // Clear the array
+
+            gameActive = false;
+            
+            // Remove all falling items
+            document.querySelectorAll('.falling-item').forEach(item => item.remove());
+
+            // Reset character animations
+            bluey.classList.remove('dance-animation', 'wiggle-animation', 'cartwheel-animation', 'celebrate-animation');
+            bingo.classList.remove('dance-animation', 'wiggle-animation', 'cartwheel-animation', 'celebrate-animation');
+            
+            // Show play again button, hide stop button
+            document.getElementById('start-btn').style.display = 'none'; // Keep start hidden
+            document.getElementById('play-again-btn').style.display = 'inline-block';
+            document.getElementById('stop-btn').style.display = 'none';
+
+            // Optionally, remove event listeners if you want to completely disable controls
+            // document.removeEventListener('keydown', handleKeyPress);
+            // document.getElementById('bluey-left-btn').onclick = null;
+            // document.getElementById('bluey-right-btn').onclick = null;
+            // document.getElementById('bingo-left-btn').onclick = null;
+            // document.getElementById('bingo-right-btn').onclick = null;
+        }
+        
+        // Handle keyboard input for character movement
+        function handleKeyPress(e) {
+            if (!gameActive) return;
+
+            const blueyCurrentX = bluey.offsetLeft;
+            const bingoCurrentX = bingo.offsetLeft;
+            const characterWidth = bluey.offsetWidth; // Assuming both have same width
+            const gameAreaPadding = 10; // To prevent characters from going exactly to the edge
+
+            switch (e.code) {
+                case 'ArrowLeft': // Bluey Left
+                    bluey.style.left = `${Math.max(gameAreaPadding, blueyCurrentX - characterSpeed)}px`;
+                    break;
+                case 'ArrowRight': // Bluey Right
+                    bluey.style.left = `${Math.min(gameContainerWidth - characterWidth - gameAreaPadding, blueyCurrentX + characterSpeed)}px`;
+                    break;
+                case 'ArrowUp': // Bingo Left (using Up for left movement for Bingo)
+                    bingo.style.left = `${Math.max(gameAreaPadding, bingoCurrentX - characterSpeed)}px`;
+                    break;
+                case 'ArrowDown': // Bingo Right (using Down for right movement for Bingo)
+                    bingo.style.left = `${Math.min(gameContainerWidth - characterWidth - gameAreaPadding, bingoCurrentX + characterSpeed)}px`;
+                    break;
+            }
+            // Prevent default scroll behavior for arrow keys
+            e.preventDefault();
+        }
+
+        // Handle button input for character movement
+        function moveCharacter(characterId, deltaX) {
+            if (!gameActive) return;
+
+            const character = document.getElementById(characterId);
+            let currentX = character.offsetLeft;
+            const characterWidth = character.offsetWidth;
+            const gameAreaPadding = 10;
+
+            let newX = currentX + deltaX;
+
+            // Boundary checks
+            newX = Math.max(gameAreaPadding, newX);
+            newX = Math.min(gameContainerWidth - characterWidth - gameAreaPadding, newX);
+
+            character.style.left = `${newX}px`;
+        }
+        
+        // Generate falling items (music notes, foods, matcha)
+        function generateFallingItem() {
+            if (!gameActive) return;
+            
+            // Randomly select an item
+            const item = fallingItems[Math.floor(Math.random() * fallingItems.length)];
+            const xPos = Math.floor(Math.random() * (gameContainerWidth - 60)) + 30; // Random X position within container
+            
+            // Create the falling item element
+            const itemElement = document.createElement('div');
+            itemElement.className = 'falling-item';
+            itemElement.textContent = item.emoji;
+            itemElement.setAttribute('data-type', item.type);
+            itemElement.setAttribute('data-points', item.points);
+            itemElement.style.left = `${xPos}px`;
+            
+            // Different colors based on item type
+            switch(item.type) {
+                case 'music':
+                    itemElement.style.color = '#3a86ff';
+                    break;
+                case 'food':
+                    itemElement.style.color = '#ff006e';
+                    break;
+                case 'matcha':
+                    itemElement.style.color = '#38b000';
+                    break;
+            }
+            
+            itemElement.style.top = '0px';
+            
+            gameContainer.appendChild(itemElement);
+            
+            // Animate the item falling
+            let yPos = 0;
+            const fallSpeed = 2 + Math.random() * 3; // Slightly faster falling
+            const fallInterval = setInterval(() => {
+                yPos += fallSpeed;
+                itemElement.style.top = `${yPos}px`;
+                
+                // Check for collision with characters when item is near the bottom
+                if (yPos >= gameContainer.offsetHeight - bluey.offsetHeight - itemElement.offsetHeight && yPos < gameContainer.offsetHeight - bluey.offsetHeight) {
+                    checkCollision(itemElement);
+                }
+
+                // Remove if it reaches the bottom without being caught
+                if (yPos > gameContainer.offsetHeight) {
+                    clearInterval(fallInterval);
+                    itemElement.remove();
+                    // Only reset streak if it was a miss, not if it was caught and removed
+                    if (itemElement.parentNode) { // Check if it's still in the DOM
+                        streak = 0;
+                        document.getElementById('streak').textContent = streak;
+                    }
+                }
+            }, 20);
+            fallingItemIntervals.push(fallInterval); // Store interval to clear later
+        }
+
+        // Check for collision with characters
+        function checkCollision(itemElement) {
+            const itemRect = itemElement.getBoundingClientRect();
+            const blueyRect = bluey.getBoundingClientRect();
+            const bingoRect = bingo.getBoundingClientRect();
+
+            let caughtByBluey = false;
+            let caughtByBingo = false;
+
+            // Check collision with Bluey
+            if (itemRect.left < blueyRect.right &&
+                itemRect.right > blueyRect.left &&
+                itemRect.bottom > blueyRect.top &&
+                itemRect.top < blueyRect.bottom) {
+                caughtByBluey = true;
+            }
+
+            // Check collision with Bingo
+            if (itemRect.left < bingoRect.right &&
+                itemRect.right > bingoRect.left &&
+                itemRect.bottom > bingoRect.top &&
+                itemRect.top < bingoRect.bottom) {
+                caughtByBingo = true;
+            }
+
+            if (caughtByBluey || caughtByBingo) {
+                const points = parseInt(itemElement.getAttribute('data-points'));
+                const itemType = itemElement.getAttribute('data-type');
+
+                score += points;
+                streak++;
+                
+                // Remove the item with a pop effect
+                itemElement.style.transform = 'scale(1.5)';
+                itemElement.style.opacity = '0';
+                // Clear its falling interval immediately
+                const index = fallingItemIntervals.indexOf(itemElement._fallInterval);
+                if (index > -1) {
+                    clearInterval(fallingItemIntervals[index]);
+                    fallingItemIntervals.splice(index, 1);
+                }
+                setTimeout(() => itemElement.remove(), 200);
+                
+                // Update score display
+                document.getElementById('score').textContent = score;
+                document.getElementById('streak').textContent = streak;
+                
+                // Celebrate!
+                celebrate(itemType);
+                
+                // Check for streak achievements
+                checkStreak();
+
+                // Check for score milestones
+                checkScoreMilestones();
+            }
+        }
+        
+        // Celebration animation
+        function celebrate(itemType) {
+
+            bluey.src = "img/blueyhappy.png"
+            bingo.src = "img/bingohappy.png";
+
+
+            // Different celebrations based on item type
+            switch(itemType) {
+                case 'music':
+                    bluey.classList.add('celebrate-animation');
+                    bingo.classList.add('celebrate-animation');
+                    break;
+                case 'food':
+                    // Bigger celebration for food items
+                    bluey.style.transform = 'scale(1.2)';
+                    bingo.style.transform = 'scale(1.2)';
+                    setTimeout(() => {
+                        bluey.style.transform = '';
+                        bingo.style.transform = '';
+                    }, 500);
+                    break;
+                case 'matcha':
+                    // Special rotation for matcha
+                    bluey.style.transform = 'rotate(15deg)';
+                    bingo.style.transform = 'rotate(-15deg)';
+                    setTimeout(() => {
+                        bluey.style.transform = '';
+                        bingo.style.transform = '';
+                    }, 500);
+                    break;
+            }
+            
+            setTimeout(() => {
+                bluey.classList.remove('celebrate-animation');
+                bingo.classList.remove('celebrate-animation');
+                bluey.src = "img/bluey.png";
+                bingo.src = "img/bingo.jpg"
+
+            }, 1000);
+        }
+        
+        // Check streak achievements
+        function checkStreak() {
+            if (streak >= 10) {
+                startDanceAnimation('cartwheel');
+            } else if (streak >= 7) {
+                startDanceAnimation('wiggle');
+            } else if (streak >= 5) {
+                startDanceAnimation('dance');
+            }
+        }
+        
+        // Start a dance animation
+        function startDanceAnimation(type) {
+            // Remove any existing dance animations
+            bluey.classList.remove('dance-animation', 'wiggle-animation', 'cartwheel-animation');
+            bingo.classList.remove('dance-animation', 'wiggle-animation', 'cartwheel-animation');
+            
+            // Add the new animation
+            switch(type) {
+                case 'cartwheel':
+                    bluey.classList.add('cartwheel-animation');
+                    bingo.classList.add('cartwheel-animation');
+                    break;
+                case 'wiggle':
+                    bluey.classList.add('wiggle-animation');
+                    bingo.classList.add('wiggle-animation');
+                    break;
+                default:
+                    bluey.classList.add('dance-animation');
+                    bingo.classList.add('dance-animation');
+            }
+        }
+
+        function checkScoreMilestones() {
+            const messageDisplay = document.getElementById('score-celebration-message');
+            for (let i = 0; i < scoreMilestones.length; i++) {
+                const milestone = scoreMilestones[i];
+                if (score >= milestone && !achievedMilestones.has(milestone)) {
+                    achievedMilestones.add(milestone);
+                    messageDisplay.textContent = `Congratulations, you've reached ${score} scores! Here's your matcha 🍵! Claim it when you come to Indoo💜`;
+                    messageDisplay.style.display = 'block';
+                    // Re-apply animation to trigger it again
+                    messageDisplay.style.animation = 'none'; 
+                    void messageDisplay.offsetWidth; // Trigger reflow
+                    messageDisplay.style.animation = 'fadeInOut 5s forwards';
+
+                    // Optionally, spawn a special matcha item or give bonus points
+                    // For now, just the message and a small celebration
+                    bluey.classList.add('celebrate-animation');
+                    bingo.classList.add('celebrate-animation');
+                    setTimeout(() => {
+                        bluey.classList.remove('celebrate-animation');
+                        bingo.classList.remove('celebrate-animation');
+                    }, 1000);
+                    break; // Only show one message per check
+                }
+            }
+        }
+     
+
+        // Event Listeners for buttons
+        document.getElementById('start-btn').addEventListener('click', initGame);
+        document.getElementById('play-again-btn').addEventListener('click', initGame);
+        document.getElementById('stop-btn').addEventListener('click', stopGame);
+    </script>
+</body>
+</html>
